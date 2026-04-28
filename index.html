@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sistema de Busca</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .result {
+      border-bottom: 1px solid #ccc;
+      padding: 8px 0;
+    }
+    .highlight {
+      background-color: #ffec99;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sistema de Busca com JSON externo</h1>
+  <input type="text" id="searchInput" placeholder="Digite uma palavra‑chave..." />
+
+  <div id="results"></div>
+
+  <script>
+
+  // URL do JSON (pode ser local ou de um servidor)
+const URL_JSON = "./dados.json";
+
+// Variável para armazenar os dados carregados
+let dados = [];
+
+// Carrega o JSON externo
+fetch(URL_JSON)
+  .then((response) => response.json())
+  .then((json) => {
+    dados = json;
+  })
+  .catch((error) => {
+    console.error("Erro ao carregar JSON:", error);
+  });
+
+// Campo de busca
+const searchInput = document.getElementById("searchInput");
+const results = document.getElementById("results");
+
+// Função de busca (case insensitive)
+function buscar(termos) {
+  const termosMin = termos.toLowerCase();
+
+  const resultadosFiltrados = dados.filter((item) => {
+    const titulo = item.titulo.toLowerCase();
+    const descricao = item.descricao.toLowerCase();
+    return titulo.includes(termosMin) || descricao.includes(termosMin);
+  });
+
+  // Monta a lista de resultados
+  results.innerHTML = "";
+  resultadosFiltrados.forEach((item) => {
+    const tit = item.titulo.replace(
+      new RegExp(termos, "gi"),
+      (match) => `<span class="highlight">${match}</span>`
+    );
+    const desc = item.descricao.replace(
+      new RegExp(termos, "gi"),
+      (match) => `<span class="highlight">${match}</span>`
+    );
+
+    const div = document.createElement("div");
+    div.className = "result";
+    div.innerHTML = `<b>${tit}</b><br><small>${desc}</small>`;
+    results.appendChild(div);
+  });
+
+  if (resultadosFiltrados.length === 0 && termos) {
+    results.innerHTML = "<p>Nenhum resultado encontrado.</p>";
+  }
+}
+
+// Dispara a busca ao digitar
+searchInput.addEventListener("input", (e) => {
+  buscar(e.target.value.trim());
+});
+</script>
+</body>
+</html>
