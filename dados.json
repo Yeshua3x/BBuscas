@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "titulo": "Introdução ao JavaScript",
+    "descricao": "Aprenda os conceitos básicos de JavaScript."
+  },
+  {
+    "id": 2,
+    "titulo": "API REST com Node.js",
+    "descricao": "Como criar uma API REST usando o Node.js."
+  },
+  {
+    "id": 3,
+    "titulo": "Trabalhando com JSON",
+    "descricao": "Como ler e manipular dados JSON no navegador."
+  }
+]
